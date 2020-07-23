@@ -35,10 +35,11 @@ function gatherParameters(ept, catalog, collector, state) {
 		if (node.type === policyTypes.elementary) {
 			result[ownId] = {
 				label: node.data.label,
-				parameters: Object.entries(node.asJSON.parameters).reduce((result, [param, value]) => {
-					result[`${id}\t${param}`] = value;
-					return result;
-				}, {})
+				parameters: Object.entries(node.asJSON.parameters)
+					.reduce((result, [param, value]) => {
+						result[`${id}\t${param}`] = value;
+						return result;
+					}, {})
 			};
 			return result;
 		}
@@ -56,14 +57,15 @@ function gatherParameters(ept, catalog, collector, state) {
 }
 
 export class PolicyForm {
-	fullCatalog = {};
-	isRendered = false;
-	inputs = {};
-	state = {};
+	fullCatalog;
+	isRendered;
+	inputs;
+	state;
 
 	constructor(policy, callback=() => {}, isReadonly=false) {
 		this.policy = policy;
 		this.callback = callback;
+		this.inputs = {};
 		this.state = {};
 		this.isRendered = false;
 		this.isReadonly = isReadonly;
@@ -85,6 +87,8 @@ export class PolicyForm {
 	collectParameters() {
 		// Walking the catalog in order to gather the real parameters set 
 		// on the children
+		if (this.policy.hasErrors) this.state[this.policy.ownId] = true;
+
 		this.formParameters = {
 			label: this.policy.data.label,
 			parameters: this.policy.data.parameters,

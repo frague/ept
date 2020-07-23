@@ -48,23 +48,32 @@ export const fromJSON = (json, availablePolicies) => {
 
 export class Policy extends Draggable {
 	type;
-	hasErrors = true;
-	asJSON = {nodes: [], links: [], parameters: {}};
-	data = {};
-	input = null;
-	output = null;
-	isSaved = false;
-	isCloned = false;
-	onDestruct = () => {};
+	hasErrors;
+	asJSON;
+	data;
+	input;
+	output;
+	isSaved;
+	isCloned;
+	onDestruct;
 
-	serialized = {};
-
-	constructor(paper, position, data, type=policyTypes.reference) {
+	constructor(position, data, type=policyTypes.reference) {
 		super(position);
-		this.paper = paper;
+		this.type = type;
+
+		this.asJSON = {
+			nodes: [], 
+			links: [], 
+			parameters: {}};
+
+		this.input = null;
+		this.output = null;
+		this.isSaved = false;
+		this.isCloned = false;
+		this.onDestruct = () => {};
+
 		this.data = clonePolicy(data);
 		this.hasErrors = isEptValid(this.ownId); 
-		this.type = type;
 	}
 
 	destructor(keepObject=false) {
@@ -92,7 +101,7 @@ export class Policy extends Draggable {
 	}
 
 	clone(type=null, cloneReferences=false) {
-		let p = new Policy(this.paper, this.position, this.data, type || this.type);
+		let p = new Policy(this.position, this.data, type || this.type);
 		let asJSON = {
 			nodes: [...this.asJSON.nodes],
 			links: [...this.asJSON.links],
@@ -149,7 +158,6 @@ export class Policy extends Draggable {
 
 	addConnectionPoint(y, type, isStatic, isMulti, acceptedTypes) {
 		let point = new ConnectionPoint(
-			this.paper,
 			{x: this.position.x + policyWidth / 2, y},
 			type,
 			isStatic,
@@ -164,12 +172,13 @@ export class Policy extends Draggable {
 	}
 
 	addExtras() {
+		let paper = this._getPaper();
 		let {x, y} = this.position;
 		this.input = this.addConnectionPoint(y, connectionPointTypes.in, false, false, this.data.input_types);
 		this.output = this.addConnectionPoint(y + policyHeight, connectionPointTypes.out, false, true, [this.data.output_type]);
 
 		this.group.push(
-			this.paper.image('./images/close.png', x + policyWidth - 12, y + 4, 8, 8)
+			paper.image('./images/close.png', x + policyWidth - 12, y + 4, 8, 8)
 				.attr('cursor', 'hand')
 				.click(() => {
 					this.destructor();
@@ -216,20 +225,22 @@ export class Policy extends Draggable {
     }
 
 	render() {
+		let paper = this._getPaper();
+
 		if (!this.isRendered) {
 			let {x, y} = this.position;
-			this.group = this.paper.set();
+			this.group = paper.set();
 			if (this.isCloned) {
-				let cRect = this.paper.rect(x + 4, y + 4, policyWidth, policyHeight)
+				let cRect = paper.rect(x + 4, y + 4, policyWidth, policyHeight)
 				.attr({
 			    	'fill': '#AAA',
 			    	'stroke': '#000'
 				});
 				this.group.push(cRect);
 			}
-			this.rect = this.paper.rect(x, y, policyWidth, policyHeight)
+			this.rect = paper.rect(x, y, policyWidth, policyHeight)
 				.attr('stroke', '#000');
-			this.text = this.paper.text(x + 5, y + policyHeight / 2, this._splitTitle(this.data.label))
+			this.text = paper.text(x + 5, y + policyHeight / 2, this._splitTitle(this.data.label))
 				.attr({
 					'text-anchor': 'start',
 					'font-size': '13px'

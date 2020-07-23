@@ -5,9 +5,9 @@ import { buildEptCatalog } from './policy_form.js';
 export const validate = () => {
 	let catalog = buildEptCatalog();
 	Object.entries(catalog).forEach(([ownId, ept]) => {
-		let hasErrors = ept.hasErrors;
 		let isValid = isEptValid(ept.id || ept.ownId, catalog);
 		ept.hasErrors = !isValid;
+		console.log('Has errors', !isValid, ept);
 		if (ept.isRendered) {
 			ept.render();
 		}

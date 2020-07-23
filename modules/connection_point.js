@@ -8,19 +8,18 @@ export const radius = 8;
 export const connectionPointTypes = { in: 'in', out: 'out' };
 
 export class ConnectionPoint extends Positioned {
-	isStatic = true;
-	isApproached = false;
+	isStatic;
+	isApproached;
 
-	connectionCandidate = null;
-	circle = null;
-	linker = null;
-	typesList = null;
-	belongsTo = null;
-	isHidden = false;
+	connectionCandidate;
+	circle;
+	linker;
+	typesList;
+	belongsTo;
+	isHidden;
 
-	constructor(paper, position, type=connectionPointTypes.any, isStatic=false, isMulti=false, types=[]) {
+	constructor(position, type=connectionPointTypes.any, isStatic=false, isMulti=false, types=[]) {
 		super(position);
-		this.paper = paper;
 		this.type = type;	// Type the point gets after linking
 		this.isStatic = isStatic;
 		this.isMulti = isMulti;
@@ -34,7 +33,7 @@ export class ConnectionPoint extends Positioned {
 	}
 	
 	clone() {
-		return new ConnectionPoint(this.paper, this.position, this.type, this.isStatic, this.isMulti);
+		return new ConnectionPoint(this.position, this.type, this.isStatic, this.isMulti);
 	}
 
 	onLinkChange() {
@@ -90,12 +89,13 @@ export class ConnectionPoint extends Positioned {
 	}
 
 	render() {
+		let paper = this._getPaper();
 		if (!this.isHidden) {
 			if (!this.isRendered) {
-				this.group = this.paper.set();
-				this.base = this.paper.circle(this.position.x, this.position.y, radius);
+				this.group = paper.set();
+				this.base = paper.circle(this.position.x, this.position.y, radius);
 
-				this.typesList = this.paper.text(
+				this.typesList = paper.text(
 					this.position.x + radius + 6,
 					this.position.y + (this.type === connectionPointTypes.out ? 8 : -10),
 					this.types.join(', '),
@@ -103,7 +103,7 @@ export class ConnectionPoint extends Positioned {
 				this.group.push(this.base, this.typesList);
 
 				if (!this.isStatic) {
-					this.linker = new Linker(this.paper, this.position, this);
+					this.linker = new Linker(this.position, this);
 					this.group.push(this.linker.render());
 				}
 			}
@@ -120,9 +120,8 @@ export class ConnectionPoint extends Positioned {
 }
 
 class Linker extends Draggable {
-	constructor(paper, position, starter) {
+	constructor(position, starter) {
 		super(position);
-		this.paper = paper;
 		this.starter = starter;
 	}
 
@@ -137,7 +136,7 @@ class Linker extends Draggable {
 		}
 
 		let isOutgoing = starter.type != connectionPointTypes.in;
-		this.tempLink = new Link(this.paper, isOutgoing ? starter : this.entity, isOutgoing ? this.entity : starter);
+		this.tempLink = new Link(isOutgoing ? starter : this.entity, isOutgoing ? this.entity : starter);
 		this.tempLink.render().attr({stroke: '#888'});
 
 		this.oldX = this.entity.position.x;
@@ -167,7 +166,7 @@ class Linker extends Draggable {
 		let connection = entity.connectionCandidate;
 		if (connection) {
 			let isIncoming = connection.type === connectionPointTypes.in;
-			new Link(entity.paper, isIncoming ? entity.starter : connection, isIncoming ? connection : entity.starter).render();
+			new Link(isIncoming ? entity.starter : connection, isIncoming ? connection : entity.starter).render();
 			entity.starter.onLinkChange();
 			connection.onLinkChange();
 			connection.isApproached = false;
@@ -190,8 +189,9 @@ class Linker extends Draggable {
 	}
 
 	render() {
+		let paper = this._getPaper();
 		if (!this.isRendered) {
-			this.circle = this.paper.circle(this.position.x, this.position.y, radius - 2);
+			this.circle = paper.circle(this.position.x, this.position.y, radius - 2);
 			this.circle.node.setAttribute('class', this._determineClassName());
 			this.circle.toFront();	
 			this.makeDraggable(this.circle);

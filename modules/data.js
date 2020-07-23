@@ -1,4 +1,4 @@
-export var basic_epts = [
+export const basic_epts = [
 	{
 		'label': 'Subinterface',
 		'tags': [],

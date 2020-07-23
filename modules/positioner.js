@@ -6,7 +6,11 @@ import { ConnectionPoint, connectionPointTypes } from './connection_point.js';
 export class Positioner {
 	starts;
 	ends;
-	positions = [];
+	positions;
+
+	constructor() {
+		this.positions = [];
+	}
 	
 	init() {
 		this.starts = [];
@@ -16,7 +20,9 @@ export class Positioner {
 		);
 		this.positions = storage.get(Policy.name, [])
 			.filter(ept => ept.isRendered)
-			.map(ept => ({...ept.position, ownId: ept.ownId}));
+			.map(ept => {
+				return Object.assign({}, ept.position, {ownId: ept.ownId})
+			});
 	}
 
 	addLink(ept) {
@@ -30,7 +36,7 @@ export class Positioner {
 
 		// Connect to the most relevant candidate if there are any
 		if (connectionCandidates.length) {
-			new Link(ept.paper, connectionCandidates[0], ept.input).render();
+			new Link(connectionCandidates[0], ept.input).render();
 			return connectionCandidates[0];
 		}
 		return null;

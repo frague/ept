@@ -6,14 +6,21 @@ export const generateId = () => {
 }
 
 export class Positioned {
-	position = {x: 0, y: 0};
-	isRendered = false;
-	linkedWith = [];
+	position;
+	isRendered;
+	linkedWith;
+
+	_getPaper() {
+		return window.paper;
+	}
 
 	constructor(position) {
 		this.id = null;
 		this.ownId = this.generateId();
 		this.position = position;
+		this.isRendered = false;
+		this.linkedWith = [];
+
 		let className = this.constructor.name;
 
 		let instances = storage.get(className, []);

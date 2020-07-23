@@ -1,11 +1,10 @@
 import { radius } from './connection_point.js';
 
 export class Link {
-	constructor(paper, from, to) {
+	constructor(from, to) {
 		from.linkWith(this);
 		to.linkWith(this);
 
-		this.paper = paper;
 		this.from = from;
 		this.to = to;
 		this.curve = null;
@@ -29,6 +28,10 @@ export class Link {
 		delete this;
 	}
 
+	_getPaper() {
+		return window.paper;
+	}
+
 	_calcPath() {
 		let {x, y} = this.from.position;
 		let dx = this.to.position.x - x;
@@ -43,8 +46,9 @@ export class Link {
 	}
 
 	render() {
+		let paper = this._getPaper();
 		if (!this.curve) {
-			let curve = this.paper.path(this._calcPath());
+			let curve = paper.path(this._calcPath());
 			curve
 				.mouseover(() => {
 					curve.attr('stroke', 'red');

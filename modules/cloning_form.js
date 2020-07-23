@@ -30,14 +30,17 @@ export const checkUniquiness = (label, extras={}) => {
 }
 
 export class CloningForm {
-	eptsTree = {};
-	labels = {};
-	cloneButton = {};
-	myReferenceId = generateId();
+	eptsTree;
+	labels;
+	cloneButton;
+	myReferenceId;
 
 	constructor(ept, callback) {
 		this.ept = ept;
 		this.callback = callback;
+		this.eptsTree = {};
+		this.labels = {};
+		this.myReferenceId = generateId();
 	}
 
 	_resetChildrenCloning(children) {
@@ -238,7 +241,7 @@ export class CloningForm {
 		cancelButton.onclick = () => {
 			clearForm();
 			this.callback();
-			delete this;
+			// delete this;
 		};
 		placeholder.appendChild(cancelButton);
 		placeholder.appendChild(this.cloneButton);
