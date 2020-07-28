@@ -71,7 +71,7 @@ export class PolicyForm {
 		this.isReadonly = isReadonly;
 		
 		this.data = clonePolicy(this.policy.data);
-		this.data.parameters = {};//Object.assign(flatten, this.policy.data.parameters);	
+		this.data.parameters = {};
 
 		this.update();
 	}

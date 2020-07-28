@@ -1,6 +1,6 @@
 import { Draggable } from './draggable.js';
 import { ConnectionPoint, connectionPointTypes } from './connection_point.js';
-import { PolicyForm } from './policy_form.js';
+import { PolicyForm } from './policy_form';
 import { isEptValid } from './validator.js';
 import { className } from './utils.js';
 

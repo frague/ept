@@ -2,7 +2,7 @@ import { basic_epts } from './modules/data';
 import { Policy, policyHeight, policyWidth, policyTypes, clonePolicy, fromJSON } from './modules/policy';
 import { Link } from './modules/link.js';
 import { ConnectionPoint, connectionPointTypes, radius } from './modules/connection_point.js';
-import { PolicyForm, clearForm } from './modules/policy_form.js';
+import { PolicyForm, clearForm } from './modules/policy_form';
 import { storage } from './modules/storage.js';
 import { CloningForm, addVersion } from './modules/cloning_form.js';
 import { generateId } from './modules/base.js';
@@ -12,8 +12,8 @@ import { className } from './modules/utils.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Catalogue } from './components/catalogue';
-import { Canvas } from './components/canvas';
+import { Catalogue } from './components/catalogue/catalogue';
+import { Canvas } from './components/canvas/canvas';
 
 
 function initNewPolicy() {

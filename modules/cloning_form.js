@@ -1,4 +1,4 @@
-import { placeholder, clearForm, buildEptCatalog } from './policy_form.js';
+import { placeholder, clearForm, buildEptCatalog } from './policy_form';
 import { Policy, policyTypes } from './policy.js';
 import { generateId } from './base.js';
 import { storage } from './storage.js';

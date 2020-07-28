@@ -1,15 +1,15 @@
 import React from 'react';
-import { storage } from '../modules/storage';
-import { className } from '../modules/utils';
-import { Policy, policyTypes } from '../modules/policy';
-import { addVersion } from '../modules/cloning_form.js';
-import { Positioner } from '../modules/positioner.js';
+import { storage } from '../../modules/storage';
+import { className } from '../../modules/utils';
+import { Policy, policyTypes } from '../../modules/policy';
+import { addVersion } from '../../modules/cloning_form.js';
+import { Positioner } from '../../modules/positioner.js';
 
 function cleanup() {}
 
 function view(ept, keepPolicyForm=false) {
 	cleanup();
-	document.getElementById('ept-label').innerText = ept.data.label;
+	// document.getElementById('ept-label').innerText = ept.data.label;
 	if (window.policy.type === policyTypes.new) {
 		window.policy.destructor();
 	}

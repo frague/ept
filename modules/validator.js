@@ -1,6 +1,6 @@
 import { storage } from './storage.js';
 import { Policy, policyTypes } from './policy.js';
-import { buildEptCatalog } from './policy_form.js';
+import { buildEptCatalog } from './policy_form';
 
 export const validate = () => {
 	let catalog = buildEptCatalog();

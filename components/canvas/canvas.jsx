@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Raphael from 'raphael/raphael';
 
-import { ConnectionPoint, connectionPointTypes, radius } from '../modules/connection_point';
-import { Link } from '../modules/link';
+import { ConnectionPoint, connectionPointTypes, radius } from '../../modules/connection_point';
+import { Link } from '../../modules/link';
 
 function initCanvas(paper) {
 	// Initialize the canvas
